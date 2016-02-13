@@ -1,0 +1,7 @@
+= content title
+  | Trace
+= content main
+  h1 Trace {{.Id}}
+  hr
+
+  = include _trace .

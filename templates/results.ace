@@ -1,0 +1,27 @@
+= content title
+  | Results
+= content main
+  h1 Results for {{.Name}}
+  hr
+
+  {{if .Results}}
+  div.row
+    div.col-md-12
+      table.table.table-bordered
+        thead
+          tr
+            td Time
+            td Name
+            td Duration
+            td Id
+        tbody
+        {{range .Results}}
+          tr
+            td {{Timestamp .Timestamp}}
+            td {{.Name}}
+            td {{Duration .Duration}}
+            td <a href={{URL "trace"}}/{{.TraceId}}>{{.TraceId}}</a>
+        {{end}}
+  {{else}}
+  h4 No results found
+  {{end}}
