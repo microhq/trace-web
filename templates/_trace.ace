@@ -8,12 +8,16 @@ div.row
           th Time
           th Name
           th Duration
+          th Source
+          th Destination
       tbody
         tr
           td {{.Id}}
           td {{Timestamp .Timestamp}}
           td {{.Name}}
           td {{Duration .Duration}}
+          td {{Service .Source}}
+          td {{Service .Destination}}
 
     h5 Annotations
 
@@ -21,11 +25,13 @@ div.row
       thead
         th Time
         th Code
+        th Service
       tbody
         {{ $ann := .Annotations }}
         {{range $i, $val := .Annotations}}
         tr
           td {{Delta $i $ann}}
           td {{.Type}}
+          td {{Service .Service}}
         {{end}}
 {{end}}

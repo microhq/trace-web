@@ -1,0 +1,21 @@
+div.row
+  div.col-md-12
+    table.table.table-bordered
+      thead
+        tr
+          td Time
+          td Name
+          td Duration
+          td Id
+          td Source
+          td Destination
+      tbody
+      {{range .}}
+        tr
+          td {{Timestamp .Timestamp}}
+          td {{.Name}}
+          td {{Duration .Duration}}
+          td <a href={{URL "trace"}}/{{.TraceId}}>{{.TraceId}}</a>
+          td {{Service .Source}}
+          td {{Service .Destination}}
+      {{end}}

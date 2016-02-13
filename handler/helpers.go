@@ -90,10 +90,6 @@ func timeAgo(t int64) string {
 	return timeAgo
 }
 
-func timestamp(t int64) string {
-	return time.Unix(t, 0).Format(time.RFC1123)
-}
-
 func hostPath(r *http.Request) string {
 	if path := r.Header.Get("X-Micro-Web-Base-Path"); len(path) > 0 {
 		return path

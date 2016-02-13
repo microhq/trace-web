@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"path/filepath"
 	"sort"
+	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/yosssi/ace"
@@ -38,11 +39,17 @@ func init() {
 		"Duration": func(t int64) string {
 			return fmt.Sprintf("%.3fms", float64(t)/1000.0)
 		},
+		"Service": func(s *proto.Service) string {
+			if s == nil {
+				return "n/a"
+			}
+			return s.Name
+		},
 		"TimeAgo": func(t int64) string {
 			return timeAgo(t)
 		},
 		"Timestamp": func(t int64) string {
-			return timestamp(t / 1e6)
+			return time.Unix(t/1e6, 0).Format(time.RFC822)
 		},
 		"Colour": func(s string) string {
 			return colour(s)
