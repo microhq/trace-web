@@ -14,7 +14,8 @@ var (
 )
 
 type sortedSpans struct {
-	spans []*proto.Span
+	spans   []*proto.Span
+	reverse bool
 }
 
 type sortedAnns struct {
@@ -26,6 +27,9 @@ func (s sortedSpans) Len() int {
 }
 
 func (s sortedSpans) Less(i, j int) bool {
+	if s.reverse {
+		return s.spans[i].Timestamp < s.spans[j].Timestamp
+	}
 	return s.spans[i].Timestamp > s.spans[j].Timestamp
 }
 

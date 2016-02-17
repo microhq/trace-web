@@ -87,7 +87,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sort.Sort(sortedSpans{rsp.Spans})
+	sort.Sort(sortedSpans{spans: rsp.Spans, reverse: false})
 
 	for _, span := range rsp.Spans {
 		if len(span.Annotations) == 0 {
@@ -110,7 +110,7 @@ func Latest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sort.Sort(sortedSpans{rsp.Spans})
+	sort.Sort(sortedSpans{spans: rsp.Spans, reverse: false})
 
 	for _, span := range rsp.Spans {
 		if len(span.Annotations) == 0 {
@@ -176,7 +176,8 @@ func Trace(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sort.Sort(sortedSpans{rsp.Spans})
+	sort.Sort(sortedSpans{spans: rsp.Spans, reverse: true})
+
 	for _, span := range rsp.Spans {
 		if len(span.Annotations) == 0 {
 			continue

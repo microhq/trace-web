@@ -1,9 +1,10 @@
-{{range .Spans}}
+{{range $idx, $val := .Spans}}
 div.row
   div.col-md-12
     table.table.table-bordered
       thead
         tr
+          th Sequence
           th Span Id
           th Time
           th Name
@@ -12,6 +13,7 @@ div.row
           th Destination
       tbody
         tr
+          td {{$idx}}
           td {{.Id}}
           td {{Timestamp .Timestamp}}
           td {{.Name}}
@@ -26,6 +28,7 @@ div.row
         th Time
         th Code
         th Service
+        th Debug
       tbody
         {{ $ann := .Annotations }}
         {{range $i, $val := .Annotations}}
@@ -33,5 +36,6 @@ div.row
           td {{Delta $i $ann}}
           td {{.Type}}
           td {{Service .Service}}
+          td {{if .Debug}}{{.Debug}}{{else}}n/a{{end}}
         {{end}}
 {{end}}
