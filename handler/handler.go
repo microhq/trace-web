@@ -17,15 +17,15 @@ import (
 )
 
 var (
-	templateDir = "templates"
 	opts        *ace.Options
-
-	TraceClient trace.TraceClient
+	traceClient trace.TraceClient
 )
 
-func init() {
+func Init(dir string, t trace.TraceClient) {
+	traceClient = t
+
 	opts = ace.InitializeOptions(nil)
-	opts.BaseDir = templateDir
+	opts.BaseDir = dir
 	opts.DynamicReload = true
 	opts.FuncMap = template.FuncMap{
 		"Delta": func(i int, a []*proto.Annotation) string {
@@ -79,7 +79,7 @@ func render(w http.ResponseWriter, r *http.Request, tmpl string, data map[string
 
 // The index page
 func Index(w http.ResponseWriter, r *http.Request) {
-	rsp, err := TraceClient.Search(context.TODO(), &trace.SearchRequest{
+	rsp, err := traceClient.Search(context.TODO(), &trace.SearchRequest{
 		Reverse: true,
 	})
 	if err != nil {
@@ -102,7 +102,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 }
 
 func Latest(w http.ResponseWriter, r *http.Request) {
-	rsp, err := TraceClient.Search(context.TODO(), &trace.SearchRequest{
+	rsp, err := traceClient.Search(context.TODO(), &trace.SearchRequest{
 		Reverse: true,
 	})
 	if err != nil {
@@ -141,7 +141,7 @@ func Search(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		rsp, err := TraceClient.Search(context.TODO(), &trace.SearchRequest{
+		rsp, err := traceClient.Search(context.TODO(), &trace.SearchRequest{
 			Name:    q,
 			Reverse: true,
 		})
@@ -168,7 +168,7 @@ func Trace(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// TODO: limit/offset
-	rsp, err := TraceClient.Read(context.TODO(), &trace.ReadRequest{
+	rsp, err := traceClient.Read(context.TODO(), &trace.ReadRequest{
 		Id: id,
 	})
 	if err != nil {

@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gorilla/mux"
 	proto "github.com/micro/go-platform/trace/proto"
 )
 
@@ -99,4 +100,13 @@ func hostPath(r *http.Request) string {
 		return path
 	}
 	return "/"
+}
+
+func Router() http.Handler {
+	r := mux.NewRouter()
+	r.HandleFunc("/", Index)
+	r.HandleFunc("/search", Search)
+	r.HandleFunc("/latest", Latest)
+	r.HandleFunc("/trace/{id}", Trace)
+	return r
 }
