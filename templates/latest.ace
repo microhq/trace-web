@@ -5,3 +5,16 @@
   hr
 
   = include _latest .Latest
+
+  div.row
+    div.col-md-12
+      nav
+        ul class="pager"
+          {{if .Less}}
+          li class="previous"
+            a href="?p={{.Less}}" <span aria-hidden="true">&larr;</span> Newer
+          {{end}}
+          {{if .More}}
+          li class="next"
+            a href="?p={{.More}}" Older <span aria-hidden="true">&rarr;</span>
+          {{end}}

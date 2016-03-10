@@ -5,6 +5,10 @@
   hr
 
   {{ $spans := .Spans}}
+  div.row
+    div.col-md-12
+      span
+        small style="font-weight: bold;" Total time {{ $span := index $spans 0 }}{{Duration $span.Duration}}
   {{range $i, $val := .Spans}}
   div.row
     div.col-md-2
@@ -18,12 +22,4 @@
 
   hr
   = include _trace .
-
-
-= content js
-  script src=https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.16/d3.min.js
-  = javascript
-    $(document).ready(function() {
-      return true;
-    });
 

@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"path/filepath"
 	"sort"
+	"strconv"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -50,6 +51,9 @@ func Init(dir string, t trace.TraceClient) {
 				return "0px"
 			}
 			w := float64(d) / float64(s[0].Duration)
+			if w > 0.7 {
+				w = 0.7
+			}
 			return fmt.Sprintf("%.0f%%", w*100)
 		},
 		"Service": func(s *proto.Service) string {
@@ -71,7 +75,7 @@ func Init(dir string, t trace.TraceClient) {
 			return timeAgo(t)
 		},
 		"Timestamp": func(t int64) string {
-			return time.Unix(t/1e6, 0).Format(time.RFC822)
+			return time.Unix(t/1e6, 0).Format("02 Jan 06 15:04:05 MST")
 		},
 		"Colour": func(s string) string {
 			return colour(s)
@@ -124,12 +128,37 @@ func Index(w http.ResponseWriter, r *http.Request) {
 }
 
 func Latest(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+
+	limit := 15
+
+	page, err := strconv.Atoi(r.Form.Get("p"))
+	if err != nil {
+		page = 1
+	}
+	if page < 1 {
+		page = 1
+	}
+
+	offset := (page * limit) - limit
+
 	rsp, err := traceClient.Search(context.TODO(), &trace.SearchRequest{
 		Reverse: true,
+		Limit:   int64(limit),
+		Offset:  int64(offset),
 	})
 	if err != nil {
 		http.Redirect(w, r, "/", 302)
 		return
+	}
+
+	var less, more int
+	if len(rsp.Spans) == limit {
+		more = page + 1
+	}
+
+	if page > 1 {
+		less = page - 1
 	}
 
 	sort.Sort(sortedSpans{spans: rsp.Spans, reverse: false})
@@ -143,6 +172,8 @@ func Latest(w http.ResponseWriter, r *http.Request) {
 
 	render(w, r, "latest", map[string]interface{}{
 		"Latest": rsp.Spans,
+		"Less":   less,
+		"More":   more,
 	})
 }
 
