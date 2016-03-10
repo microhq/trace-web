@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -28,6 +29,10 @@ func Init(dir string, t trace.TraceClient) {
 	opts.BaseDir = dir
 	opts.DynamicReload = true
 	opts.FuncMap = template.FuncMap{
+		"Data": func(spans []*proto.Span) string {
+			b, _ := json.Marshal(spans)
+			return string(b)
+		},
 		"Delta": func(i int, a []*proto.Annotation) string {
 			if i == 0 {
 				return "0ms"
@@ -39,11 +44,28 @@ func Init(dir string, t trace.TraceClient) {
 		"Duration": func(t int64) string {
 			return fmt.Sprintf("%.3fms", float64(t)/1000.0)
 		},
+		"Offset": func(t int64, s []*proto.Span) string {
+			d := t - s[0].Timestamp
+			if d == 0 {
+				return "0px"
+			}
+			w := float64(d) / float64(s[0].Duration)
+			return fmt.Sprintf("%.0f%%", w*100)
+		},
 		"Service": func(s *proto.Service) string {
 			if s == nil {
 				return "n/a"
 			}
 			return s.Name
+		},
+		"Scale": func(t int64, s []*proto.Span) string {
+			if len(s) == 0 {
+				return "100%"
+			}
+
+			w := float64(t) / float64(s[0].Duration)
+
+			return fmt.Sprintf("%.0f%%", w*100)
 		},
 		"TimeAgo": func(t int64) string {
 			return timeAgo(t)
