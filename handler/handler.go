@@ -15,7 +15,7 @@ import (
 	"golang.org/x/net/context"
 
 	proto "github.com/micro/go-os/trace/proto"
-	"github.com/micro/trace-srv/proto/trace"
+	trace "github.com/micro/trace-srv/proto/trace"
 )
 
 var (

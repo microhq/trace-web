@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/micro/go-micro/client"
 	"github.com/micro/go-web"
-	"github.com/micro/trace-srv/proto/trace"
+	trace "github.com/micro/trace-srv/proto/trace"
 	"github.com/micro/trace-web/handler"
 )
 
