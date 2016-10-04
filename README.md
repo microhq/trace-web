@@ -1,6 +1,6 @@
 # Trace Web
 
-The trace web is a dashboard for the platform trace-srv. 
+The trace web is a dashboard for the trace service. 
 
 ## Getting started
 

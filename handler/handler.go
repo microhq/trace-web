@@ -14,7 +14,7 @@ import (
 	"github.com/yosssi/ace"
 	"golang.org/x/net/context"
 
-	proto "github.com/micro/go-platform/trace/proto"
+	proto "github.com/micro/go-os/trace/proto"
 	"github.com/micro/trace-srv/proto/trace"
 )
 
