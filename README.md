@@ -2,6 +2,9 @@
 
 The trace web is a dashboard for the trace service. 
 
+## Dependence on Service
+- [trace-srv](https://github.com/microhq/trace-srv)
+
 ## Getting started
 
 1. Install Consul
